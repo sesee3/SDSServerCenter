@@ -45,6 +45,34 @@ func setupServer(_ app: Application) async throws -> ServerService {
         ]
     }
     
+    app.get("docs") { req in
+        "accessed to docs"
+    }
+    
+    app.get("data/students") { req in
+        "accessed to students data"
+    }
+    
+    app.get("data/classrooms") { req in
+        "accessed to classrooms data"
+    }
+    
+    app.get("data/packs") { req in
+        "accessed to packs data"
+    }
+    
+    app.get("data/days") { req in
+        "accessed to days data"
+    }
+    
+    app.get("data/tranches") { req in
+        "accessed to tranches data"
+    }
+    
+    app.get("data/conferences") { req in
+        "accessed to conferences data"
+    }
+    
     return ServerService(app: app)
 }
 

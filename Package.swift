@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SDSSwiftServer",
     platforms: [
-        .macOS(.v26)
+        .macOS(.v12)
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor", from: "4.0.0"),
