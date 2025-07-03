@@ -5,22 +5,27 @@ import PackageDescription
 
 let package = Package(
     name: "SDSSwiftServer",
-    products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "SDSSwiftServer",
-            targets: ["SDSSwiftServer"]
-        ),
+    platforms: [
+        .macOS(.v26)
+    ],
+    dependencies: [
+        .package(url: "https://github.com/vapor/vapor", from: "4.0.0"),
+        .package(url: "https://github.com/swift-server/swift-service-lifecycle", from: "2.1.0"),
+        
+        .package(url: "https://github.com/apple/swift-openapi-generator", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-openapi-runtime", from: "1.0.0"),
+        .package(url: "https://github.com/swift-server/swift-openapi-vapor", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.5.2"),
+        
+        .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "SDSSwiftServer"
-        ),
-        .testTarget(
-            name: "SDSSwiftServerTests",
-            dependencies: ["SDSSwiftServer"]
-        ),
+        .executableTarget(name: "SDSServer", dependencies: [
+            .product(name: "Vapor", package: "vapor"),
+            .product(name: "ServiceLifecycle", package: "swift-service-lifecycle"),
+            
+                .product(name: "Logging", package: "swift-log")
+        ])
     ]
 )
