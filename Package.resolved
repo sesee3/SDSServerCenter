@@ -1,6 +1,15 @@
 {
-  "originHash" : "9c5f842c934ec73e608a275e62e0b4e4eff98cd676afd95dbb6c88a8b5722a70",
+  "originHash" : "d2dc01632fb39d6a57be13695f8b7d1170f6dc2045aeeb67dd313276edf490c2",
   "pins" : [
+    {
+      "identity" : "apnswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swift-server-community/APNSwift.git",
+      "state" : {
+        "revision" : "f407b435d28456c2568cc2713a226cd06a5d5736",
+        "version" : "6.1.0"
+      }
+    },
     {
       "identity" : "async-http-client",
       "kind" : "remoteSourceControl",
