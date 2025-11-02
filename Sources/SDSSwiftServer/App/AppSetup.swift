@@ -43,7 +43,12 @@ enum SDSAppError: Error, LocalizedError {
 
 func configure(_ app: Application) throws -> ServerService {
     
+    let defaultPublic = app.directory.publicDirectory
+    
+    app.middleware.use(FileMiddleware(publicDirectory: defaultPublic))
     app.middleware.use(RequestLoggerInjectionMiddleware())
+    
+    
     try routes(app)
     
     let wsQueue = DispatchQueue(label: "ws_queue")

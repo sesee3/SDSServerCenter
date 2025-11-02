@@ -24,12 +24,6 @@ struct AppRoutes: RouteCollection {
             return .init(status: .ok, headers: headers, body: .init(data: encodedResponse))
         }
         
-        data.get("subscriptionportal") { req async throws -> Response in
-            // Redirect the browser to the static subscription page
-            // Ensure `subscription.html` is located under the `Public/` directory
-            return req.redirect(to: "/subscription.portal.html", type: .normal)
-        }
-        
     }
     
 }

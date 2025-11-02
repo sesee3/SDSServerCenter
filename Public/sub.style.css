@@ -1,0 +1,87 @@
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+h1 {
+    margin-top: 40px;
+    font-size: 2.2rem;
+    color: #222;
+    letter-spacing: 1px;
+}
+.form-container {
+    background: #fff;
+    padding: 30px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+    margin-top: 24px;
+    min-width: 70%;
+    max-width: 10%;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+input,
+select {
+    width: 90%;
+    padding: 10px 12px;
+    margin-bottom: 18px;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    background: #f9f9f9;
+}
+input:focus,
+select:focus {
+    border-color: #0074d9;
+    outline: none;
+    background: #fff;
+}
+.fixed-signup-btn {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #112d4e;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 18px 0;
+    cursor: pointer;
+    box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.08);
+    transition:
+        background 0.2s,
+        box-shadow 0.2s;
+    z-index: 100;
+}
+.fixed-signup-btn:hover {
+    background: #6cb4bc;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+}
+.form-container button {
+    display: none;
+}
+@media (max-width: 500px) {
+    .form-container {
+        padding: 18px 8px;
+        min-width: unset;
+    }
+    .form-container button {
+        display: block;
+    }
+    .fixed-signup-btn {
+        font-size: 1rem;
+        padding: 14px 0;
+    }
+}

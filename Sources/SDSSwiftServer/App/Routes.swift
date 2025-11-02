@@ -31,10 +31,13 @@ func routes(_ app: Application) throws {
     
     
     //TODO: Da vedere
-    app.get("api", apiVersion.versionPath, "") { req async -> Response in
-        let ip = "[OK] Server disponibile su IP: \(req.peerAddress?.ipAddress ?? "Server non disponibile")"
-        
-        return Response(status: .ok, body: .init(stringLiteral: ip))
+    app.get(apiVersion.versionPath, "subscriptionportal") { req -> Response in
+        let path = app.directory.publicDirectory + "subscription.portal.html"
+        if FileManager.default.fileExists(atPath: path) {
+            return req.fileio.streamFile(at: path)
+        } else {
+            return Response(status: .notFound)
+        }
     }
     
 }
