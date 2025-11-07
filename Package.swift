@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SDSSwiftServer",
+    name: "sds-portal",
     platforms: [
         .macOS(.v13)
     ],
