@@ -31,14 +31,17 @@ func routes(_ app: Application) throws {
     
     
     //TODO: Da vedere
-    app.get(apiVersion.versionPath, "subscriptionportal") { req -> Response in
-        let path = app.directory.publicDirectory + "subscription.portal.html"
+    app.get(apiVersion.versionPath, "subscriptionportal") { req async throws -> Response in
+        let path = app.directory.publicDirectory + "subportal.html"
+        
+        app.logger.info(.init(stringLiteral: path))
+        
         if FileManager.default.fileExists(atPath: path) {
-            return req.fileio.streamFile(at: path)
+            return try await req.fileio.asyncStreamFile(at: path, mediaType: .html)
         } else {
             return Response(status: .notFound)
-        }
-    }
+        }}
+    
     
 }
 
@@ -70,5 +73,6 @@ public enum DataVersion: String, @unchecked Sendable {
         return "\(rawValue)"
     }
 }
+
 
 

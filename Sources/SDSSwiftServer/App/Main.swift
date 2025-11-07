@@ -28,7 +28,7 @@ struct EntryPoint {
             cancellationSignals: [.sigterm],
             logger: app.logger
         )
-        
+
         try await serviceGroup.run()
         
         

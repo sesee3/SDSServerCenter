@@ -43,11 +43,13 @@ enum SDSAppError: Error, LocalizedError {
 
 func configure(_ app: Application) throws -> ServerService {
     
-    let defaultPublic = app.directory.publicDirectory
+    let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
     
-    app.middleware.use(FileMiddleware(publicDirectory: defaultPublic))
+    
+    
     app.middleware.use(RequestLoggerInjectionMiddleware())
     
+    app.middleware.use(file)
     
     try routes(app)
     

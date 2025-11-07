@@ -15,7 +15,7 @@ async function fetchStudents() {
             const option = document.createElement("option");
             option.textContent = `${student.name} ${student.surname}`;
             option.value = student.id;
-            picker.appendChild(li);
+            picker.appendChild(option);
         })
 
     } catch (e) {
@@ -56,3 +56,50 @@ async function fetchCache(dataType) {
     if (apiData) localStorage.setItem(dataType, JSON.stringify(apiData));
     return apiData;
 }
+
+
+
+//CUSTOM PICKER
+// Opzioni di esempio
+const options = [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I",
+    "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+    const list = document.getElementById("picker-options");
+    options.forEach(opt => {
+        const li = document.createElement("li");
+        li.textContent = opt;
+        li.onclick = () => selectOption(opt);
+        list.appendChild(li);
+    });
+});
+
+function filterOptions() {
+    const input = document.getElementById("picker-search");
+    const filter = input.value.toLowerCase();
+    const listItems = document.querySelectorAll("#picker-options li");
+
+    listItems.forEach(li => {
+        const text = li.textContent.toLowerCase();
+        li.style.display = text.includes(filter) ? "block" : "none";
+    });
+}
+
+function selectOption(value) {
+    const input = document.getElementById("picker-search");
+    input.value = value;
+    document.getElementById("picker-options").style.display = "none";
+    // Puoi salvare il valore selezionato in un input nascosto per il form
+}
+
+document.getElementById("picker-search").addEventListener("click", () => {
+    const optionsMenu = document.getElementById("picker-options");
+    optionsMenu.style.display = "block";
+});
+document.addEventListener("click", (e) => {
+    if (!e.target.closest(".custom-picker")) {
+        document.getElementById("picker-options").style.display = "none";
+    }
+});
