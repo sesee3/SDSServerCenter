@@ -37,7 +37,7 @@
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 
                 .product(name: "SystemPackage", package: "swift-system"),
-                .product(name: "Crypto", package: "swift-crypto">)
+                .product(name: "Crypto", package: "swift-crypto")
             ], resources: [
                 .copy("AuthKey_89C7VG72JF.p8")
             ])
