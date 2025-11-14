@@ -41,7 +41,7 @@ enum SDSAppError: Error, LocalizedError {
 }
 
 
-func configure(_ app: Application) throws -> ServerService {
+func configure(_ app: Application) async throws -> ServerService {
     
     let file = FileMiddleware(publicDirectory: app.directory.publicDirectory)
     
@@ -50,6 +50,8 @@ func configure(_ app: Application) throws -> ServerService {
     app.middleware.use(RequestLoggerInjectionMiddleware())
     
     app.middleware.use(file)
+    
+    app.userStore = try await EncryptedUserStore(fileURL: URL(string: "users")!, key: .init(base64Encoded: "3JvYwW+haXX6ukYbtf/h9Ff+y4GBqLv9gV9+ONrfcpM=")!, logger: .current)
     
     try routes(app)
     
@@ -72,11 +74,10 @@ func configure(_ app: Application) throws -> ServerService {
     )
     
     app.migrations.add(StudentBuilder())
+    app.migrations.add(CreateUser())
     
     
-    
-    
-    try app.autoMigrate().wait()
+    try await app.autoMigrate().get()
     
     return ServerService(app: app)
     

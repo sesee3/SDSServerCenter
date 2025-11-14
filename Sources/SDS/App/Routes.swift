@@ -7,6 +7,7 @@
 
 import Foundation
 import Vapor
+import Fluent
 
 func routes(_ app: Application) throws {
     
@@ -21,13 +22,20 @@ func routes(_ app: Application) throws {
     try app.register(collection: TranchesRoutes())
     try app.register(collection: ConferencesRoutes())
     
-//    try app.register(collection: AuthRoutes())
+    try app.register(collection: AuthRoutes())
     
 //    try app.register(collection: Queries())
     
     try app.register(collection: AppRoutes())
     
     try app.register(collection: AlertRoutes())
+    
+    
+    // Protected routes example
+    let protected = app.grouped(ProtectedMiddleware())
+    protected.get("protected-info") { req async throws -> String in
+        return "Sensitive data only for authenticated users."
+    }
     
     
     //TODO: Da vedere
@@ -73,6 +81,3 @@ public enum DataVersion: String, @unchecked Sendable {
         return "\(rawValue)"
     }
 }
-
-
-
