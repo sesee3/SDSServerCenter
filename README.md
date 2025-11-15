@@ -1,4 +1,4 @@
-# SdsPortal
+# SDS's Portal
 
 💧 A project built with the Vapor web framework.
 
