@@ -18,6 +18,9 @@ enum Entrypoint {
         // let executorTakeoverSuccess = NIOSingletons.unsafeTryInstallSingletonPosixEventLoopGroupAsConcurrencyGlobalExecutor()
         // app.logger.debug("Tried to install SwiftNIO's EventLoopGroup as Swift's global concurrency executor", metadata: ["success": .stringConvertible(executorTakeoverSuccess)])
         
+        app.http.server.configuration.hostname = "0.0.0.0"
+        app.http.server.configuration.port = 8080
+        
         do {
             try await configure(app)
             try await app.execute()
