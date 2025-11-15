@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="it">
+    <head>
+        <title>Iscriviti alla SDS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="sub.style.css" />
+        <script src="sub.script.js"></script>
+    </head>
+    <body>
+        <h1>Procedi con l'iscrizione</h1>
+
+        <div class="sub_day_picker">
+            <button class="day_picker_item" onclick="fetchStudents()">13 dicembre</button>
+            <button class="day_picker_item" onclick="fetchStudents()">14 dicembre</button>
+        </div>
+
+
+        <div class="packs-container">
+            <div class="pack_card">
+                <h1>Pacchetto 12</h1>
+                <h2>Aula 23</h2>
+                <h2 class="max_num_label">23</h2>
+
+            </div>
+        </div>
+
+        <form class="form-container" onsubmit="handleSubmit(event)">
+
+            <button type="submit">Iscriviti</button>
+        </form>
+        <button class="fixed-signup-btn" onclick="handleFixedButtonClick()">
+            Iscriviti
+        </button>
+    </body>
+</html>

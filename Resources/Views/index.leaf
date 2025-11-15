@@ -2,8 +2,10 @@
 <html>
 <head>
     <title>#(title)</title>
+    <link rel="stylesheet" href="/css/sub.style.css">
 </head>
 <body>
     <h1>#(title)</h1>
+    <p>Benvenuto nella tua prima pagina Leaf!</p>
 </body>
 </html>

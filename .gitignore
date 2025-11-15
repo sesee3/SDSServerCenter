@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Packages
 .build
 xcuserdata
@@ -10,3 +11,17 @@ db.sqlite
 .env.*
 !.env.example
 default.profraw
+=======
+.DS_Store
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+
+/.idea
+/.swiftpm
+
+>>>>>>> 4c981c22e47e895206b7f3f587098a6735a5008e

@@ -1,0 +1,18 @@
+<!doctype html>
+<header>
+    <title>Iscrizione Confer</header></title>mata</title>
+
+    <script></script>
+        function goBack() {
+            window.location.href = "subscriptio.view.html";
+        }
+    </script>
+</header>
+<body>
+    <div class="confirm-container</body>">
+        <h1>Iscrizione confermata!</h</h1>1>
+        <p>Grazie per esserti iscritto alla SDS.<</p>br>
+        Riceverai una email di conferma a breve.</p>
+        <button class="back-btn" onclick="goBack()">Torna alla pagina di iscrizione</button>
+    </div>
+</body>
