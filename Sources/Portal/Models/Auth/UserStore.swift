@@ -28,6 +28,7 @@ public final class UserStore: @unchecked Sendable {
                     keyData = keyData.prefix(32)
                 }
                 self.key = SymmetricKey(data: keyData)
+                print("[DEBUG]: FATTO!\(key), \(keyData)")
             } else {
                 let keyString = "/eTWahJeDwnQF375J6Tzxkk7ad8VO3Ns"
                 let keyData = Data(keyString.utf8)
@@ -36,6 +37,9 @@ public final class UserStore: @unchecked Sendable {
                 
                 print("⚠️ WARNING: Chiave di crittografia di default")
             }
+        
+        print("[DEBUG]: \(key)")
+        
         }
         
         static func generateNewKey() -> String {
