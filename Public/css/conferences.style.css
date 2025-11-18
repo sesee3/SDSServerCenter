@@ -332,6 +332,7 @@
         margin-bottom: 30px;
     }
 
+
     .app-header .header-content {
         max-width: 1200px;
         margin: 0 auto;
@@ -449,6 +450,7 @@
         line-height: 1.6;
         margin-bottom: 16px;
         display: -webkit-box;
+        line-clamp: 3;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;

@@ -4,88 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Sistema Autenticazione</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-        }
-        .navbar {
-            background: white;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar h1 {
-            color: #667eea;
-            font-size: 24px;
-        }
-        .nav-links a {
-            margin-left: 20px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .nav-links button {
-            margin-left: 20px;
-            padding: 8px 16px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        .welcome {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .welcome h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .card {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/scripts/common.js" defer></script>
 </head>
 <body>
-    <div class="navbar">
-        <h1>🔐 Sistema Autenticazione</h1>
-        <div class="nav-links">
-            <a href="/user/dashboard">Dashboard</a>
-            <a href="/user/sessions">Sessioni</a>
-            <a href="/server/activities">Attività</a>
-            <button onclick="logout()">Logout</button>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="navbar-brand">🔐 Sistema Autenticazione</h1>
+            <div class="navbar-links">
+                <a href="/user/dashboard" class="nav-link active">Dashboard</a>
+                <a href="/user/sessions" class="nav-link">Sessioni</a>
+                <a href="/server/activities" class="nav-link">Attività</a>
+                <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
         </div>
-    </div>
+    </nav>
     
     <div class="container">
         <div class="welcome">
@@ -104,44 +38,23 @@
             </div>
         </div>
         
-        <div class="welcome", style="margin-top:30px">
-            <h2 onclick="window.location.href='/conferences'" style="cursor: pointer; color: blue">
-            Conferenze</h2>
+        <div class="welcome" style="margin-top: 30px">
+            <h2 onclick="window.location.href='/conferences'" style="cursor: pointer; color: var(--primary)">
+                Conferenze
+            </h2>
             <p>Aggiungi e traccia le modifiche delle conferenze</p>
         </div>
     </div>
     
     <script>
-        function checkAuth() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/';
-                return false;
-            }
-            
-            const user = JSON.parse(localStorage.getItem('user'));
+        // Check authentication on page load
+        const user = requireAuth();
+        if (user) {
             document.getElementById('username').textContent = user.username;
-            return true;
         }
         
-        async function logout() {
-            const token = localStorage.getItem('token');
-            try {
-                await fetch('/api/v1/auth/ogout', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-            } catch (error) {
-                console.error('Errore durante il logout', error);
-            }
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/';
-        }
-        
-        checkAuth();
+        // Initialize theme
+        initTheme();
     </script>
 </body>
 </html>

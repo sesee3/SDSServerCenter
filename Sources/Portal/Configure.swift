@@ -1,8 +1,6 @@
 import Leaf
 import Vapor
 import JWTKit
-@preconcurrency import MongoSwift
-import JWT
 import NIOPosix
 
 import Fluent
@@ -40,30 +38,6 @@ public func configure(_ app: Application) async throws {
     try await routes(app)
 }
 
-
-
-private struct MongoKey: StorageKey {
-    typealias Value = MongoDatabase
-}
-
-extension Application {
-    var mongoDB: MongoDatabase {
-        get { self.storage[MongoKey.self]! }
-        set { self.storage[MongoKey.self] = newValue }
-    }
-}
-
-extension Request {
-    var mongoDB: MongoDatabase {
-        self.application.mongoDB
-    }
-}
-
-func initMongoDBIndexes(db: MongoDatabase, logger: Logger) async throws {    
-    _ = try await db.collection("conferences").createIndex(["created_by": 1])
-    
-    logger.info("Indici MongoDB creati con successo.")
-}
 
 extension Application {
     var userStore: UserStore {

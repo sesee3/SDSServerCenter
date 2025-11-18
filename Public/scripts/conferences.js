@@ -669,51 +669,14 @@ container.style.className = "array-list";
     }
 
     /* * ===================================
-    * GESTIONE TEMA (Light/Dark/Auto)
+    * GESTIONE TEMA E INIZIALIZZAZIONE
     * ===================================
     */
-    function applyTheme(theme) {
-        let actualTheme;
-
-        if (theme === 'auto') {
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (prefersDark) {
-                document.documentElement.dataset.theme = 'dark';
-                actualTheme = 'dark';
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                actualTheme = 'light';
-            }
-        } else if (theme === 'light') {
-            document.documentElement.removeAttribute('data-theme');
-            actualTheme = 'light';
-        } else { // theme === 'dark'
-            document.documentElement.dataset.theme = 'dark';
-            actualTheme = 'dark';
-        }
-
-        // Aggiorna l'icona attiva nello switcher
-        const themeIcons = document.querySelectorAll('.theme-icon');
-        themeIcons.forEach(icon => {
-            icon.classList.remove('active');
-        });
-
-        const selectedIcon = document.getElementById(`theme${theme.charAt(0).toUpperCase() + theme.slice(1)}`);
-        if (selectedIcon) {
-            selectedIcon.classList.add('active');
-        }
-    }
-
-    // Imposta e salva il tema scelto
-    function setTheme(theme) {
-        localStorage.setItem('theme', theme);
-        applyTheme(theme);
-    }
-
-    // Al caricamento della pagina, applica il tema salvato (o 'auto')
+    
+    // Al caricamento della pagina
     document.addEventListener('DOMContentLoaded', () => {
-        const savedTheme = localStorage.getItem('theme') || 'auto';
-        applyTheme(savedTheme);
+        // Applica il tema salvato (funzione da common.js)
+        initTheme();
 
         // --- Listener per il selettore custom ---
         // Popola il selettore custom per la prima volta
@@ -729,23 +692,9 @@ container.style.className = "array-list";
         // --- Fine listener ---
     });
 
-    // Ascolta i cambiamenti del tema di sistema (per la modalità 'auto')
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        const currentTheme = localStorage.getItem('theme') || 'auto';
-        if (currentTheme === 'auto') {
-            applyTheme('auto');
-        }
-    });
-
     // Utilities
     function closeModal(modalId) {
         document.getElementById(modalId).classList.remove("active");
-    }
-
-    function logout() {
-        localStorage.removeItem('JAUTHENTICATION');
-        localStorage.removeItem('currentUser');
-        window.location.href = '/signin';
     }
 
     // Helper per formattare la data (ora globale)
