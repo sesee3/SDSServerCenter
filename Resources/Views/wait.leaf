@@ -1,0 +1,193 @@
+
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDS Portal - Manutenzione</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+    
+    <style>
+
+		.conference_redirect_button {
+
+width: 100px;
+			padding: 12px 15px;
+			font-size: 16px;
+			display: inline-block;
+			font-family: Arial, sans-serif;
+			
+			background-color: rgb(134, 103, 235, 0.7);
+
+			color: white;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			width: auto;
+
+			margin-top: 25px;
+			text-decoration: none;
+
+			position: relative;
+			overflow: hidden;
+			white-space: nowrap;
+
+			transition: 0.3s ease-in-out;
+		}
+
+		.conference_redirect_button:hover {
+			background-color: #683dcc;
+		}
+
+        /* --- Reset Base --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* --- Stile del Body e Background Animato --- */
+        body, html {
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            line-height: 1.7;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            
+            /* Il Gradiente:
+              Usiamo 4 colori e una dimensione del 400% per permettere
+              all'animazione di muoversi.
+            */
+            background: linear-gradient(135deg, #667eea, #764ba2, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            
+            /* L'Animazione:
+              'gradientBG' è il nome, dura 15 secondi, 'ease' è il timing,
+              'infinite' la fa ripetere all'infinito.
+            */
+            animation: gradientBG 15s ease infinite;
+        }
+
+        /* --- Keyframes per l'animazione del background --- */
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- Box Centrale (Effetto Vetro / Glassmorphism) --- */
+        .content-box {
+            padding: 3rem 4rem;
+            
+            /* Sfondo semi-trasparente */
+            background: rgba(255, 255, 255, 0.1);
+            
+            /* Effetto "blur" dello sfondo (cruciale per il glassmorphism) */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Supporto Safari */
+            
+            border-radius: 15px;
+            
+            /* Bordo leggero per definire la "lastra di vetro" */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            
+            /* Ombra per dare profondità */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+
+            /* Animazione di fade-in per il box */
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* --- Keyframes per l'animazione del box --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Stili del Testo --- */
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        /* --- Loader Animato (Spinner) --- */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3); /* Colore base dell'anello */
+            border-top: 5px solid #fff; /* Colore della parte "attiva" */
+            border-radius: 50%;
+            margin: 0 auto; /* Per centrarlo */
+            
+            /* Animazione di rotazione */
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Responsive Design (per dispositivi mobili) --- */
+        @media (max-width: 600px) {
+            .content-box {
+                padding: 2rem 1.5rem;
+                /* Riduciamo il padding per schermi piccoli */
+            }
+            h1 {
+                font-size: 2.2rem; /* Riduciamo il font */
+            }
+            p {
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="content-box">
+            <h1>Benvenuti nel portale della SDS</h1>
+            <p>App, Console e Risorse saranno disponibili al termine del periodo di Manutenzione<br>Aggiungi all'indirizzo web /conferences per '</p>
+            
+            <div class="loader"></div>
+
+			<a href="/conferences" class="conference_redirect_button">
+				Vai alla Console delle Conferenze
+			</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+

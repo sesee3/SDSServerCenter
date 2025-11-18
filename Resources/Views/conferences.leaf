@@ -1,0 +1,240 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Conference Management System</title>
+	
+	<link rel="stylesheet" href="/css/conferences.style.css" />
+	<script src="/scripts/conferences.js" defer></script>
+
+</head>
+<body>
+
+	<div id="appScreen" style="display: none">
+		<div class="app-header">
+			<div class="header-content">
+				<div class="title-header">
+				<h1>Console delle Conferenze</h1>
+				<a href="/user/dashboard" style="margin-bottom: 12px; text-decoration: none; color: var(--primary);">
+				 <svg width="14" height="11" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.08013 16C8.53924 16 8.88148 15.6694 8.88148 15.2231C8.88148 15.0083 8.80633 14.7934 8.66444 14.6446L5.73457 11.719L1.6611 8L5.73457 4.281L8.66444 1.34711C8.80633 1.19835 8.88148 0.991737 8.88148 0.776859C8.88148 0.330579 8.53924 0 8.08013 0C7.86309 0 7.66277 0.0743804 7.44573 0.289256L0.275459 7.3967C0.0918198 7.57026 0 7.77685 0 8C0 8.22315 0.0918198 8.42974 0.275459 8.59504L7.49582 15.7521C7.67945 15.9174 7.86309 16 8.08013 16ZM4.93322 8.80167H19.1986C19.6661 8.80167 20 8.46281 20 8C20 7.52893 19.6661 7.19834 19.1986 7.19834H4.93322L1.64441 7.37189C1.27713 7.37189 1.01002 7.62811 1.01002 8C1.01002 8.36363 1.27713 8.61985 1.65275 8.61985L4.93322 8.80167Z" fill="var(--primary)"/>
+</svg> Ritorna alla dashboard
+				</a>
+				</div>
+
+				<div class="user-info">
+			
+				<div class="theme-switcher-custom">
+					<button id="themeAuto" class="theme-icon active" onclick="setTheme('auto')" title="Auto Theme">
+						<svg width="18" height="18" viewBox="0 0 71 90" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+							<path d="M5.34961 89.5254C2.12695 89.5254 0 87.6562 0 84.6914C0 83.4023 0.322266 82.1777 0.837891 80.6309L27.3281 6.57422C28.9395 2.0625 31.1953 0 35.3203 0C39.4453 0 41.7012 2.0625 43.3125 6.57422L69.8027 80.6309C70.3184 82.0488 70.6406 83.4023 70.6406 84.627C70.6406 87.6562 68.5137 89.5254 65.2266 89.5254C62.1328 89.5254 60.3926 88.043 59.168 84.2402L51.7559 62.2617H18.8203L11.4082 84.2402C10.1836 88.1074 8.44336 89.5254 5.34961 89.5254ZM21.8496 53.1738H48.7266L35.5137 13.9863H35.0625L21.8496 53.1738Z" fill="black"/>
+						</svg>
+					</button>
+
+					<button id="themeLight" class="theme-icon" onclick="setTheme('light')" title="Light Theme">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+					</button>
+
+					<button id="themeDark" class="theme-icon" onclick="setTheme('dark')" title="Dark Theme">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+					</button>
+
+				</div>
+
+				<span class="user-name" id="currentUser"></span>
+				<button
+						class="btn btn-secondary btn-sm"
+						style="margin-bottom: 12px"
+						onclick="logout()">
+					Logout
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+
+		<!-- Conferences Tab -->
+		<div id="conferencesTab">
+			<div class="toolbar">
+				<div class="search-box">
+					<input
+							type="text"
+							id="searchInput"
+							placeholder="🔍 Cerca..."
+							oninput="filterConferences()"
+					/>
+				</div>
+				<button
+						class="btn btn-success btn-sm"
+						onclick="showCreateModal()"
+				>
+					+ Nuova Conferenza
+				</button>
+			</div>
+
+			<div id="conferencesContainer">
+				<div class="spinner"></div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Conference Detail Modal -->
+<div id="detailModal" class="modal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h2>Conference Details</h2>
+			<button
+					class="close-btn"
+					onclick="closeModal('detailModal')"
+			>
+				
+			</button>
+		</div>
+		<div class="modal-body" id="detailContent"></div>
+		<div class="modal-footer">
+			<button
+					class="btn btn-secondary btn-sm"
+					onclick="closeModal('detailModal')"
+			>
+				Annulla
+			</button>
+			<button
+					class="btn btn-primary btn-sm"
+					onclick="editConference()"
+			>
+				Modifica
+			</button>
+			<button
+					class="btn btn-danger btn-sm"
+					onclick="deleteConference()"
+			>
+				Elimina
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div id="formModal" class="modal">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h2 id="formModalTitle">Nuova Conferenza</h2>
+			<button class="close-btn" onclick="closeModal('formModal')">
+				<svg width="17" height="17" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M1.76205 17.6618L17.5558 1.77031C17.9459 1.37779 17.9565 0.698849 17.5558 0.306333C17.1552 -0.107398 16.491 -0.0967897 16.1009 0.306333L0.296542 16.1979C-0.0935581 16.5904 -0.104101 17.2693 0.296542 17.6618C0.697185 18.0756 1.36141 18.065 1.76205 17.6618ZM0.296542 1.77031L16.1009 17.6618C16.491 18.065 17.1552 18.0756 17.5558 17.6618C17.9565 17.2693 17.9459 16.5904 17.5558 16.1979L1.76205 0.306333C1.36141 -0.0967897 0.697185 -0.107398 0.296542 0.306333C-0.104101 0.698849 -0.0935581 1.37779 0.296542 1.77031Z" fill="white" fill-opacity="0.85"/>
+				</svg>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="form-group">
+				<label>Titolo</label>
+				<input
+						type="text"
+						id="formTitle"
+						placeholder="Il Cinema: tra realtà e finzione"
+				/>
+			</div>
+			<div class="form-group">
+				<label>Abstract</label>
+				<textarea id="formAbstract"></textarea>
+			</div>
+			<div class="form-group">
+				<label>Modalità</label>
+				<div class="checkbox-group">
+					<input type="checkbox" id="formIsOnline" style="margin-bottom: 12px" />
+					<label for="formIsOnline">La conferenza è online?</label>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label>URL di Google Meet</label>
+				<input
+						type="url"
+						id="formUrl"
+						placeholder="https://meet.example.com/..."
+				/>
+			</div>
+			<div class="form-group">
+				<label>Relatori</label>
+				<div class="array-input">
+					<input
+							type="text"
+							id="attendeeInput"
+							placeholder="Nome, Cognome"
+					/>
+					<button
+							class="btn-add"
+							onclick="addArrayItem('attendee')"
+					>
+						Aggiungi
+					</button>
+				</div>
+				<ul class="array-list" id="attendeesList"></ul>
+			</div>
+			<div class="form-group">
+				<label>Contatti</label>
+				<div class="array-input">
+					<input
+							type="text"
+							id="contactInput"
+							placeholder="example@email.com, +39399..."
+					/>
+					<button
+							class="btn-add"
+							onclick="addArrayItem('contact')"
+					>
+						Aggiungi
+					</button>
+				</div>
+				<ul class="array-list" id="contactsList"></ul>
+			</div>
+
+			
+			<div class="form-group">
+				<label>Disponibilità</label>
+				<div class="availability-adder">
+					<div class="custom-select-container" id="customSelectContainer">
+						<button type="button" class="custom-select-button placeholder" id="customSelectButton" onclick="toggleCustomSelect()">
+							<span>Seleziona un giorno della SDS</span>
+							
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+						</button>
+
+						<div class="custom-select-options" id="customSelectOptions"></div>
+
+					</div>
+
+					<button
+							type="button"
+							class="btn-add"
+							onclick="addAvailabilitySlot()">
+						Aggiungi
+					</button>
+				</div>
+
+				<div class="array-list" id="availabilitySlotsContainer"></div></div>
+
+			<div class="form-group">
+				<label>Altro</label>
+				<textarea
+						id="formExternalNotes"
+						placeholder="Aggiungi ulteriori informazioni sulla conferenza"
+				></textarea>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button
+					class="btn btn-primary btn-sm"
+					onclick="saveConference()"
+					id="saveBtn"
+			>
+				Salva
+			</button>
+		</div>
+	</div>
+</div>
+</body>
+</html>
