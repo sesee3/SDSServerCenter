@@ -112,7 +112,7 @@
                 print("[DEBUG] 7. Firma JWT riuscita!")
             } catch {
                 print("[DEBUG] CRITICO: Errore durante la firma JWT: \(error)")
-                throw error
+                throw Abort(.internalServerError, reason: "Errore interno durante la generazione del token")
             }
             
             // --- CREAZIONE OGGETTI ---
