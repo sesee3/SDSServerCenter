@@ -60,23 +60,68 @@
        
         @Sendable func signupAPI(req: Request) async throws -> AuthResponse {
             
+            print("[DEBUG] 1. Inizio richiesta Signup")
+            
             let authData = try req.content.decode(AuthRequest.self)
+            print("[DEBUG] 2. Dati ricevuti per username: \(authData.username)")
+            
             let store = req.application.userStore
             var users = try store.loadUsers()
             
-            if users.contains(where: {
-                $0.username == authData.username
-            }) {
+            if users.contains(where: { $0.username == authData.username }) {
+                print("[DEBUG] Errore: Username già in uso")
                 throw Abort(.badRequest, reason: "Questo username è gia in uso")
             }
             
-            let passwordHash = try await req.password.async.hash(authData.password)
-            let deviceInfo = getDevice(from: req)
+            // --- DEBUG HASHING ---
+            print("[DEBUG] 3. Inizio Hashing Password...")
+            let passwordHash: String
+            do {
+                passwordHash = try await req.password.async.hash(authData.password)
+                print("[DEBUG] 4. Hashing completato con successo.")
+            } catch {
+                print("[DEBUG] CRITICO: Errore durante Hashing password: \(error)")
+                throw error
+            }
+            
+            // Generiamo gli ID subito
             let sessionID = UUID().uuidString
+            let userID = UUID()
+            
+            // --- DEBUG JWT ---
+            print("[DEBUG] 5. Preparazione Payload JWT...")
+            let payload = AuthPayload(
+                subject: .init(value: authData.username),
+                expiration: .init(value: .now.addingTimeInterval(31536000)),
+                userID: userID.uuidString, // Usa l'ID generato qui
+                sessionID: sessionID
+            )
+            
+            // Controllo preventivo della chiave (solo per debug)
+            if let key = Environment.get("JWT_SECRET") {
+                print("[DEBUG] INFO: JWT_SECRET trovata nelle env variables (lunghezza: \(key.count))")
+            } else {
+                print("[DEBUG] ATTENZIONE: JWT_SECRET non trovata o nil!")
+            }
+            
+            print("[DEBUG] 6. Tentativo Firma JWT...")
+            let token: String
+            do {
+                // Se crasha qui con errore 503316581, è colpa dell'algoritmo in configure.swift
+                token = try await req.jwt.sign(payload, kid: nil)
+                print("[DEBUG] 7. Firma JWT riuscita!")
+            } catch {
+                print("[DEBUG] CRITICO: Errore durante la firma JWT: \(error)")
+                throw error
+            }
+            
+            // --- CREAZIONE OGGETTI ---
+            print("[DEBUG] 8. Creazione oggetti User e Session...")
+            let deviceInfo = getDevice(from: req)
             
             let session = UserSession(
                 id: sessionID,
-                token: "",
+                token: token, // Inseriamo il token generato PRIMA
                 deviceInfo: deviceInfo,
                 loggedAt: .now,
                 lastLogAt: .now,
@@ -84,31 +129,19 @@
             )
             
             let user = User(
+                id: userID.uuidString,
                 username: authData.username,
                 passwordHash: passwordHash,
                 createdAt: .now,
                 sessions: [session]
             )
             
+            // --- SALVATAGGIO ---
+            print("[DEBUG] 9. Salvataggio su UserStore...")
             users.append(user)
             try store.saveUsers(users)
             
-            //Web Token
-            let payload = AuthPayload(
-                subject: .init(value: user.username),
-                expiration: .init(value: .now.addingTimeInterval(31536000)),
-                userID: user.id,
-                sessionID: sessionID
-            )
-            
-            let token = try await req.jwt.sign(payload, kid: nil)
-            
-            if let userIDX = users.firstIndex(where: { $0.id == user.id }),
-               let sessionIDX = users[userIDX].sessions.firstIndex(where: { $0.id == sessionID }) {
-                users[userIDX].sessions[sessionIDX].token = token
-                try store.saveUsers(users)
-            }
-            
+            print("[DEBUG] 10. Aggiunta Activity Log...")
             try store.addActivity(
                 Activity(
                     userID: user.id,
@@ -120,12 +153,13 @@
                 )
             )
             
+            print("[DEBUG] 11. Signup completato con successo!")
+            
             return AuthResponse(
                 token: token,
                 username: user.username,
                 userID: user.id
             )
-            
         }
         
         @Sendable func signinAPI(req: Request) async throws -> AuthResponse {

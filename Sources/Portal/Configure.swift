@@ -17,14 +17,27 @@ public func configure(_ app: Application) async throws {
     print(uri)
     try app.databases.use(.mongo(connectionString: uri), as: .mongo)
     
-    //MARK: Security & JWT
-    let jwtKey = Environment.get("JWT_SECRET") ?? "NO JWT"
-    print(jwtKey)
+        // Assicurati che jwtKey sia caricata dall'ambiente
+        guard let rawKey = Environment.get("JWT_SECRET") else {
+            fatalError("JWT_SECRET non trovata!")
+        }
 
-    await app.jwt.keys.add(
-        hmac: .init(from: jwtKey),
-        digestAlgorithm: .sha256
-    )
+        // 1. PULIZIA: Rimuovi spazi e accapo (Cruciale su Linux/Systemd)
+        let cleanKey = rawKey.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // 2. CONVERSIONE: Trasforma la stringa in Data (bytes) esplicita
+        // Questo bypassa l'ambiguità di codifica delle stringhe su Linux
+        guard let keyData = cleanKey.data(using: .utf8) else {
+            fatalError("Impossibile convertire la JWT Key in UTF8 data")
+        }
+
+        // 3. REGISTRAZIONE
+        await app.jwt.keys.add(
+            hmac: .init(from: keyData), // <--- Passa 'keyData', non la stringa
+            digestAlgorithm: .sha256
+        )
+
+        print("[SYSTEM] Chiave HMAC registrata correttamente su Linux. Lunghezza bytes: \(keyData.count)")
     
 //    app.middleware.use(MantainanceMiddleware())
     
