@@ -3,58 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistema Autenticazione</title>
+    <title>SDS Portal - Dashboard</title>
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/conferences-page.css">
+    <script src="/scripts/common.js" defer></script>
     <script src="/scripts/common.js" defer></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <h1 class="navbar-brand">🔐 Sistema Autenticazione</h1>
-            <div class="navbar-links">
-                <a href="/user/dashboard" class="nav-link active">Dashboard</a>
+    <header class="app-header">
+        <div class="header-content">
+            <h1>SDS Portal</h1>
+            <nav class="nav-links">
+               <!-- <a href="/user/dashboard" class="nav-link active">Dashboard</a>
                 <a href="/user/sessions" class="nav-link">Sessioni</a>
                 <a href="/server/activities" class="nav-link">Attività</a>
+                <a href="/conferences" class="nav-link">Conferenze</a> -->
+            </nav>
+            <div class="user-info">
+                <div class="theme-switcher-custom">
+                    <button id="themeAuto" class="theme-icon active" onclick="setTheme('auto')" title="Auto Theme">
+                       <svg width="17" height="16" viewBox="0 0 14 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.80498 10.5753C10.0084 10.5753 10.1907 10.697 10.2631 10.8811L10.9284 12.5745L11.2371 13.2909C11.3567 13.5454 11.4551 13.7097 11.5291 13.8039C11.5747 13.8577 11.628 13.9032 11.6914 13.9411L11.7594 13.9772L11.7732 13.9837C11.8481 14.0214 11.9584 14.0509 12.1217 14.0509C12.3761 14.0509 12.5766 13.9702 12.7516 13.8007C12.9531 13.6056 13.0197 13.4304 13.0197 13.265C13.0197 13.0668 12.9142 12.6604 12.6267 11.9924L12.6248 11.9878L8.95822 3.21985C8.95693 3.21676 8.95561 3.21369 8.95439 3.21058C8.78313 2.77458 8.64229 2.43217 8.53125 2.18132C8.52944 2.17723 8.52768 2.17295 8.52598 2.16881C8.43138 1.93717 8.3121 1.72334 8.1689 1.52604C8.16718 1.52368 8.16579 1.52103 8.16411 1.51863C8.0514 1.35712 7.89776 1.22164 7.69311 1.11314C7.6891 1.11101 7.68509 1.10888 7.68114 1.10665C7.51415 1.01201 7.27711 0.949086 6.94256 0.949086C6.61663 0.949086 6.37671 1.01102 6.19967 1.10897L6.19632 1.11082C6.00038 1.21724 5.84402 1.35495 5.72196 1.52651C5.58691 1.72596 5.4491 1.99035 5.31127 2.32684C5.17139 2.67769 5.05046 2.97973 4.94844 3.23282L4.94796 3.23421L1.35797 12.0577L1.35654 12.0614C1.21138 12.4097 1.11147 12.6708 1.05354 12.8502C1.00279 13.0074 0.980306 13.1514 0.980306 13.2835C0.980306 13.4561 1.04766 13.6243 1.24022 13.8021C1.42958 13.9768 1.62638 14.0509 1.84956 14.0509C2.17594 14.0509 2.3053 13.9636 2.36652 13.8878C2.50559 13.7058 2.70864 13.3043 2.96964 12.6264L3.63977 10.8844L3.67184 10.8176C3.75756 10.6696 3.92015 10.5753 4.09929 10.5753H9.80498ZM6.92198 2.90101C7.12835 2.90043 7.31308 3.02522 7.38389 3.2129L9.49959 8.82029C9.55442 8.96576 9.53239 9.12806 9.44071 9.25497C9.349 9.38188 9.1991 9.45749 9.03911 9.45749H4.84601C4.68649 9.45749 4.53716 9.3822 4.44536 9.2559C4.35356 9.1296 4.33072 8.96797 4.38457 8.8226L6.46198 3.21521C6.53168 3.0272 6.71564 2.9016 6.92198 2.90101ZM5.54246 8.5084H8.33835L6.92724 4.76953L5.54246 8.5084ZM14 13.265C14 13.7297 13.7921 14.1354 13.4447 14.4717C13.0837 14.8212 12.6332 15 12.1217 15C11.8436 15 11.576 14.9503 11.3353 14.8322V14.8327C11.3341 14.8322 11.3331 14.8314 11.3319 14.8309C11.3285 14.8292 11.3248 14.8279 11.3214 14.8262V14.8258C11.1041 14.7225 10.9164 14.5795 10.7642 14.3976C10.7619 14.3948 10.7597 14.392 10.7575 14.3892C10.615 14.2107 10.4785 13.9684 10.3449 13.6839C10.3431 13.68 10.3414 13.6758 10.3396 13.6718C10.218 13.3929 10.1119 13.1476 10.0218 12.9359C10.0201 12.932 10.0186 12.9279 10.017 12.9239L9.46704 11.5243H4.4401L3.88868 12.9577V12.9582C3.62726 13.6372 3.38353 14.1556 3.15249 14.4564L3.14866 14.461C2.83875 14.8542 2.36152 15 1.84956 15C1.35799 15 0.922862 14.8207 0.563389 14.4888C0.207156 14.16 0 13.7535 0 13.2835C0 13.0449 0.0413634 12.8057 0.11823 12.5675C0.187949 12.3515 0.29871 12.0624 0.447073 11.7065L4.03563 2.88665C4.13735 2.63427 4.25842 2.33239 4.39845 1.98112L4.39989 1.97742C4.5548 1.59921 4.72257 1.27115 4.90584 1.00145L4.91063 0.994501C5.0939 0.735175 5.32393 0.520401 5.59703 0.3522L5.7167 0.28315C6.07501 0.0858185 6.49127 0 6.94256 0C7.39412 0 7.80994 0.0838715 8.16363 0.280833H8.16411C8.16637 0.28203 8.16856 0.283338 8.17081 0.28454C8.17254 0.285512 8.17436 0.286344 8.17608 0.287321H8.1756C8.49893 0.460825 8.76687 0.691487 8.97019 0.980135H8.97114C9.15714 1.23639 9.31005 1.51286 9.43162 1.8078H9.4321C9.54996 2.07407 9.69498 2.42692 9.86673 2.86394L13.5314 11.6272C13.8183 12.2938 14 12.8576 14 13.265Z" fill=none/>
+                        </svg>
+                    </button>
+                    <button id="themeLight" class="theme-icon" onclick="setTheme('light')" title="Light Theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                    <button id="themeDark" class="theme-icon" onclick="setTheme('dark')" title="Dark Theme">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                </div>
                 <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
             </div>
         </div>
-    </nav>
-    
+    </header>
+
     <div class="container">
         <div class="welcome">
-            <h2>Benvenuto, <span id="username"></span>!</h2>
-            <p>Il tuo account è protetto e le tue sessioni sono monitorate.</p>
+            <h2 id="username">Benvenuto</span>
+            <p>Dalla Console puoi controllare le iscrizioni ai pacchetti, programmare nuove conferenze e tracciare gli spostamenti degli studenti durante la SDS.</p>
         </div>
         
         <div class="cards">
-            <div class="card" onclick="window.location.href='/user/sessions'">
+          <!--  <div class="card" onclick="window.location.href='/user/sessions'">
                 <h3>📱 Sessioni Attive</h3>
                 <p>Visualizza e gestisci tutte le tue sessioni attive</p>
             </div>
-            <div class="card" onclick="window.location.href='/server/activities'">
+           <div class="card" onclick="window.location.href='/server/activities'">
                 <h3>📊 Registro Attività</h3>
                 <p>Monitora tutte le attività degli utenti</p>
+            </div> -->
+
+
+
+            <div class="card disabled" onclick="window.location.href='/students'">
+                <h3>👨‍🎓 Studenti</h3>
+               <!-- <p>Gestisci gli studenti dell'istituto e registra i loro spostamenti</p> .-->
+                 <p>Non ancora disponibile</p>
             </div>
-        </div>
-        
-        <div class="welcome" style="margin-top: 30px">
-            <h2 onclick="window.location.href='/conferences'" style="cursor: pointer; color: var(--primary)">
-                Conferenze
-            </h2>
-            <p>Aggiungi e traccia le modifiche delle conferenze</p>
+
+            <div class="card disabled" onclick="window.location.href='/classrooms'">
+                <h3>🚪 Classi</h3>
+               <!--  <p>Gestici classi e aule dei plessi</p> -->
+                 <p>Non ancora disponibile</p>
+            </div>
+
+            <div class="card disabled" onclick="window.location.href='/packs'">
+                <h3>📦 Pacchetti</h3>
+               <!--  <p>Aggiungi, modifica e gestisci i pacchetti</p>   -->
+               <p>Non ancora disponibile</p>
+            </div>
+
+            <div class="card" onclick="window.location.href='/conferences'">
+                <h3>🗣️ Conferenze</h3>
+             <p>Programma nuove conferenze e organizzale in pacchetti</p>
+            </div>
+
+            <div class="card disabled" onclick="window.location.href='/subscriptions_console'">
+                <h3>🗳️ Iscrizioni</h3>
+               <!--  <p>Monitora le iscrizioni degli studenti ai pacchetti</p> -->
+                 <p>Non ancora disponibile</p>
+            </div>
+
+            <div class="card disabled" onclick="window.location.href='/movements'">
+                <h3>↔️ Spostamenti & Organizzazione</h3>
+               <!--  <p>Visualizza gli spostamenti programmati di studenti o intere classi.</p> -->
+                 <p>Non ancora disponibile</p>
+            </div>
+
         </div>
     </div>
     
     <script>
-        // Check authentication on page load
-        const user = requireAuth();
-        if (user) {
-            document.getElementById('username').textContent = user.username;
-        }
-        
-        // Initialize theme
-        initTheme();
+        const user = getCurrentUser();
+            console.log(user);
+            if (user && user.username) {
+                document.getElementById('username').textContent = user.username;
+            } else {
+            document.getElementById('username').textContent = 'Utente';
+            }   
+            initTheme();
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        document.getElementById("username").textContent = currentUser.username;
+
     </script>
 </body>
 </html>

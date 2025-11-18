@@ -30,7 +30,7 @@ func routes(_ app: Application) async throws {
     
     //Users's
     
-    app.get("signin") { req -> EventLoopFuture<View> in
+    app.get("login") { req -> EventLoopFuture<View> in
         return req.view.render("login")
     }
     

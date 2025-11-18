@@ -1,13 +1,4 @@
 /**
- * COMMON.JS - Funzionalità condivise tra tutte le pagine
- * Include: gestione tema, autenticazione, utilità comuni
- */
-
-/* ===================================
- * GESTIONE AUTENTICAZIONE
- * =================================== */
-
-/**
  * Ottiene il token JWT dal localStorage
  */
 function getToken() {
@@ -67,7 +58,7 @@ async function logout() {
     localStorage.removeItem('theme');
     
     // Reindirizza al login
-    window.location.href = '/signin';
+    window.location.href = '/login';
 }
 
 /**
@@ -82,7 +73,6 @@ function displayUsername(elementId) {
         }
     }
 }
-
 /* ===================================
  * GESTIONE TEMA (Light/Dark/Auto)
  * =================================== */

@@ -30,16 +30,13 @@
                 fatalError("Impossibile convertire la stringa della chiave in Data UTF8")
             }
 
-            // 4. NORMALIZZAZIONE VIA SHA256
-            // Invece di tagliare/allungare manualmente, facciamo l'hash.
-            // SHA256 garantisce sempre un output di 32 byte validi e sicuri.
             let hashedKey = SHA256.hash(data: inputData)
             let hashedData = Data(hashedKey)
 
             // 5. Creazione della SymmetricKey (usando i bytes SHA256)
             self.key = SymmetricKey(data: hashedData)
 
-            print("[DEBUG] UserStore Key inizializzata correttamente con SHA256 (32 bytes garantiti).")
+    
         }
         
             static func generateNewKey() -> String {

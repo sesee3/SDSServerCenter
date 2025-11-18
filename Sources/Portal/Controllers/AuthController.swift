@@ -60,36 +60,27 @@
        
         @Sendable func signupAPI(req: Request) async throws -> AuthResponse {
             
-            print("[DEBUG] 1. Inizio richiesta Signup")
             
             let authData = try req.content.decode(AuthRequest.self)
-            print("[DEBUG] 2. Dati ricevuti per username: \(authData.username)")
-            
+
             let store = req.application.userStore
             var users = try store.loadUsers()
             
             if users.contains(where: { $0.username == authData.username }) {
-                print("[DEBUG] Errore: Username già in uso")
                 throw Abort(.badRequest, reason: "Questo username è gia in uso")
             }
             
-            // --- DEBUG HASHING ---
-            print("[DEBUG] 3. Inizio Hashing Password...")
             let passwordHash: String
             do {
                 passwordHash = try await req.password.async.hash(authData.password)
-                print("[DEBUG] 4. Hashing completato con successo.")
             } catch {
-                print("[DEBUG] CRITICO: Errore durante Hashing password: \(error)")
                 throw error
             }
             
-            // Generiamo gli ID subito
             let sessionID = UUID().uuidString
             let userID = UUID()
             
-            // --- DEBUG JWT ---
-            print("[DEBUG] 5. Preparazione Payload JWT...")
+
             let payload = AuthPayload(
                 subject: .init(value: authData.username),
                 expiration: .init(value: .now.addingTimeInterval(31536000)),
@@ -97,31 +88,23 @@
                 sessionID: sessionID
             )
             
-            // Controllo preventivo della chiave (solo per debug)
-            if let key = Environment.get("JWT_SECRET") {
-                print("[DEBUG] INFO: JWT_SECRET trovata nelle env variables (lunghezza: \(key.count))")
-            } else {
-                print("[DEBUG] ATTENZIONE: JWT_SECRET non trovata o nil!")
+            guard let key = Environment.get("JWT_SECRET") else {
+                throw Abort(.notFound, reason: "JWT Code not found")
             }
-            
-            print("[DEBUG] 6. Tentativo Firma JWT...")
+
             let token: String
             do {
-                // Se crasha qui con errore 503316581, è colpa dell'algoritmo in configure.swift
+            
                 token = try await req.jwt.sign(payload, kid: nil)
-                print("[DEBUG] 7. Firma JWT riuscita!")
             } catch {
-                print("[DEBUG] CRITICO: Errore durante la firma JWT: \(error)")
                 throw Abort(.internalServerError, reason: "Errore interno durante la generazione del token")
             }
             
-            // --- CREAZIONE OGGETTI ---
-            print("[DEBUG] 8. Creazione oggetti User e Session...")
             let deviceInfo = getDevice(from: req)
             
             let session = UserSession(
                 id: sessionID,
-                token: token, // Inseriamo il token generato PRIMA
+                token: token,
                 deviceInfo: deviceInfo,
                 loggedAt: .now,
                 lastLogAt: .now,
@@ -136,12 +119,10 @@
                 sessions: [session]
             )
             
-            // --- SALVATAGGIO ---
-            print("[DEBUG] 9. Salvataggio su UserStore...")
+
             users.append(user)
             try store.saveUsers(users)
             
-            print("[DEBUG] 10. Aggiunta Activity Log...")
             try store.addActivity(
                 Activity(
                     userID: user.id,
@@ -152,8 +133,6 @@
                     deviceInfo: deviceInfo
                 )
             )
-            
-            print("[DEBUG] 11. Signup completato con successo!")
             
             return AuthResponse(
                 token: token,

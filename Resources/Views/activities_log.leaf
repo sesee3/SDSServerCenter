@@ -8,68 +8,154 @@
     <link rel="stylesheet" href="/css/dashboard.css">
     <script src="/scripts/common.js" defer></script>
 </head>
-<body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <h1 class="navbar-brand">🔐 Sistema Autenticazione</h1>
-            <div class="navbar-links">
-                <a href="/user/dashboard" class="nav-link">Dashboard</a>
-                <a href="/user/sessions" class="nav-link">Sessioni</a>
-                <a href="/server/activities" class="nav-link active">Attività</a>
-                <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+<body class="requires-auth">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div>
+                    <a href="/user/dashboard" class="sidebar-brand">SDS Portal</a>
+                    <span class="sidebar-subtitle">Console amministrativa</span>
+                </div>
+                <button class="sidebar-toggle" data-sidebar-toggle aria-label="Comprimi sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="8 4 16 12 8 20"></polyline>
+                    </svg>
+                </button>
             </div>
-        </div>
-    </nav>
-    
-    <div class="container">
-        <h2>📊 Registro Attività Utenti</h2>
-        <table id="activities">
-            <thead>
-                <tr>
-                    <th>Data/Ora</th>
-                    <th>Utente</th>
-                    <th>Azione</th>
-                    <th>Dispositivo</th>
-                    <th>IP</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+            <div class="sidebar-user">
+                <span class="sidebar-user-label">Utente</span>
+                <span class="sidebar-user-name" id="currentUser" data-username></span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/user/dashboard" class="sidebar-link" data-nav-target="/user/dashboard">Dashboard</a>
+                <a href="/user/sessions" class="sidebar-link" data-nav-target="/user/sessions">Sessioni</a>
+                <a href="/server/activities" class="sidebar-link" data-nav-target="/server/activities">Attività</a>
+                <a href="/conferences" class="sidebar-link" data-nav-target="/conferences">Conferenze</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-switcher-custom">
+                    <button id="themeAuto" class="theme-icon active" onclick="setTheme('auto')" title="Tema automatico">
+                        <svg width="18" height="18" viewBox="0 0 71 90" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.34961 89.5254C2.12695 89.5254 0 87.6562 0 84.6914C0 83.4023 0.322266 82.1777 0.837891 80.6309L27.3281 6.57422C28.9395 2.0625 31.1953 0 35.3203 0C39.4453 0 41.7012 2.0625 43.3125 6.57422L69.8027 80.6309C70.3184 82.0488 70.6406 83.4023 70.6406 84.627C70.6406 87.6562 68.5137 89.5254 65.2266 89.5254C62.1328 89.5254 60.3926 88.043 59.168 84.2402L51.7559 62.2617H18.8203L11.4082 84.2402C10.1836 88.1074 8.44336 89.5254 5.34961 89.5254ZM21.8496 53.1738H48.7266L35.5137 13.9863H35.0625L21.8496 53.1738Z" />
+                        </svg>
+                    </button>
+                    <button id="themeLight" class="theme-icon" onclick="setTheme('light')" title="Tema chiaro">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </button>
+                    <button id="themeDark" class="theme-icon" onclick="setTheme('dark')" title="Tema scuro">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button class="btn btn-secondary btn-sm btn-block" onclick="logout()">Logout</button>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="page-topbar">
+                <button class="sidebar-toggle" data-sidebar-toggle aria-label="Mostra menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="topbar-actions">
+                    <h1>Registro attività</h1>
+                </div>
+            </div>
+            <div class="content-area">
+                <header class="page-header">
+                    <div>
+                        <h2>Log di accesso e operazioni</h2>
+                        <p>Consulta le attività recenti degli utenti del sistema.</p>
+                    </div>
+                </header>
+
+                <div id="activitiesContainer">
+                    <table id="activities">
+                        <thead>
+                            <tr>
+                                <th>Data/Ora</th>
+                                <th>Utente</th>
+                                <th>Azione</th>
+                                <th>Dispositivo</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
-    
+
     <script>
-        requireAuth();
-        initTheme();
-        
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = requireAuth();
+            if (!user) {
+                return;
+            }
+
+            document.querySelectorAll('[data-username]').forEach(el => {
+                el.textContent = user.username;
+            });
+
+            initLayout();
+            loadActivities();
+        });
+
         async function loadActivities() {
             const token = getToken();
-            if (!token) return;
-            
+            if (!token) {
+                return;
+            }
+
             try {
                 const response = await fetch('/api/activities', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                
-                if (response.status === 401) {
-                    window.location.href = '/revoked';
+
+                if (!response.ok) {
+                    await handleApiError(response);
                     return;
                 }
-                
+
                 const activities = await response.json();
                 displayActivities(activities);
             } catch (error) {
-                handleApiError(error);
+                console.error('Errore nel caricamento delle attività', error);
+                showAlert('Impossibile caricare il registro attività.', 'error');
             }
         }
-        
+
         function displayActivities(activities) {
             const tbody = document.querySelector('#activities tbody');
             tbody.innerHTML = '';
-            
-            activities.reverse().forEach(activity => {
+
+            if (!activities.length) {
+                document.getElementById('activitiesContainer').innerHTML = `
+                    <div class="empty-state">
+                        <p>Nessuna attività registrata al momento.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            [...activities].reverse().forEach(activity => {
                 const tr = document.createElement('tr');
-                const date = formatDate(activity.timestamp);
-                
+                const date = formatDateTime(activity.timestamp);
+
                 tr.innerHTML = `
                     <td>${date}</td>
                     <td>${escapeHtml(activity.username)}</td>
@@ -77,12 +163,10 @@
                     <td>${escapeHtml(activity.deviceInfo.device)} - ${escapeHtml(activity.deviceInfo.browser)}</td>
                     <td>${escapeHtml(activity.ipAddress)}</td>
                 `;
-                
+
                 tbody.appendChild(tr);
             });
         }
-        
-        loadActivities();
     </script>
 </body>
 </html>

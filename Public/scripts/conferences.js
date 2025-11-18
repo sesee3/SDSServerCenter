@@ -737,12 +737,3 @@ container.style.className = "array-list";
             closeModal("formModal");
         }
     });
-
-    // Handle Enter key in login form
-    document
-        .getElementById("secureCode")
-        .addEventListener("keypress", (e) => {
-            if (e.key === "Enter") {
-                login();
-            }
-        });
