@@ -48,7 +48,6 @@ function requireAuth() {
 async function logout() {
     const token = getToken();
     
-    // Chiama l'API di logout se disponibile
     if (token) {
         try {
             await fetch('/api/v1/auth/logout', {
