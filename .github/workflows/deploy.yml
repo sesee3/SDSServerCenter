@@ -1,0 +1,50 @@
+name: Deploy SDS Portal
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Swift
+        uses: fwal/setup-swift@v1
+        with:
+          swift-version: 5.9
+
+      - name: Build Release
+        run: swift build -c release
+
+      - name: Stop current service
+        run: |
+          sudo systemctl stop sds-portal-blue || true
+          sudo systemctl stop sds-portal-green || true
+
+      - name: Blue/Green deploy
+        run: |
+          ACTIVE=$(systemctl is-active sds-portal-blue || echo "inactive")
+          if [ "$ACTIVE" = "active" ]; then
+            TARGET="green"
+          else
+            TARGET="blue"
+          fi
+          echo "Deploying to $TARGET instance"
+          sudo cp -r .build/release/sds-portal /server/sds-portal-$TARGET/
+          sudo systemctl start sds-portal-$TARGET
+
+          # Aggiorna file per dashboard
+          echo $(date +"%Y-%m-%d %H:%M:%S") > /server/deploy_last.txt
+
+      - name: Telegram Notification
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -s -X POST https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage \
+          -d chat_id=$TELEGRAM_CHAT_ID \
+          -d text="🚀 Deploy completato su $TARGET | $(date +"%Y-%m-%d %H:%M:%S")"
