@@ -19,29 +19,28 @@ public final class UserStore: @unchecked Sendable {
     private let key: SymmetricKey
     
     public init() {
-            if let envKey = Environment.get("ENCRYPTION_KEY") {
-                var keyData = Data(envKey.utf8)
-                
-                if keyData.count < 32 {
-                    keyData.append(Data(repeating: 0, count: 32 - keyData.count))
-                } else if keyData.count > 32 {
-                    keyData = keyData.prefix(32)
-                }
-                self.key = SymmetricKey(data: keyData)
-                print("[DEBUG]: FATTO!\(key), \(keyData)")
-            } else {
-                let keyString = "/eTWahJeDwnQF375J6Tzxkk7ad8VO3Ns"
-                let keyData = Data(keyString.utf8)
-                assert(keyData.count == 32, "La chiave deve essere esattamente 32 byte")
-                self.key = SymmetricKey(data: keyData)
-                
-                print("⚠️ WARNING: Chiave di crittografia di default")
-            }
-        
-        print("[DEBUG]: \(key)")
-        
+        // 1. Recupera la chiave o usa quella di default
+        let rawKeyString = Environment.get("ENCRYPTION_KEY") ?? "/eTWahJeDwnQF375J6Tzxkk7ad8VO3Ns"
+
+        // 2. PULIZIA (Cruciale su Linux: rimuove \n e spazi invisibili)
+        let cleanKeyString = rawKeyString.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // 3. Conversione in Data
+        guard let inputData = cleanKeyString.data(using: .utf8) else {
+            fatalError("Impossibile convertire la stringa della chiave in Data UTF8")
         }
-        
+
+        // 4. NORMALIZZAZIONE VIA SHA256
+        // Invece di tagliare/allungare manualmente, facciamo l'hash.
+        // SHA256 garantisce sempre un output di 32 byte validi e sicuri.
+        let hashedKey = SHA256.hash(data: inputData)
+
+        // 5. Creazione della SymmetricKey
+        self.key = SymmetricKey(data: hashedKey)
+
+        print("[DEBUG] UserStore Key inizializzata correttamente con SHA256 (32 bytes garantiti).")
+    }
+    
         static func generateNewKey() -> String {
             let key = SymmetricKey(size: .bits256)
             return key.withUnsafeBytes { bytes in
