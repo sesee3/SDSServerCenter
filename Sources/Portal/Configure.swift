@@ -13,11 +13,13 @@ public func configure(_ app: Application) async throws {
 
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     
-    try app.databases.use(.mongo(connectionString: "mongodb://localhost:27017/sds-portal-db"), as: .mongo)
+    let uri = Environment.get("DATABASE_URI") ?? "NO URI"
+    print(uri)
+    try app.databases.use(.mongo(connectionString: uri), as: .mongo)
     
     //MARK: Security & JWT
-    let jwtKey = Environment.get("JWT_SECRET") ??
-    "0xa3b9c91f2d44b0f87cf03daad34ed8b19b4e78a3f812e238d32a917bb320df09"
+    let jwtKey = Environment.get("JWT_SECRET") ?? "NO JWT"
+    print(jwtKey)
 
     await app.jwt.keys.add(
         hmac: .init(from: jwtKey),

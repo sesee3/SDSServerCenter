@@ -35,7 +35,7 @@ function handleFixedButtonClick() {
 //DATA ------!!!!!!!!!SPOSTARE TUTTE LE FUNZIONI DI API IN UN ALTRO FILE!!!!!!!!!!
 async function fetchAPI(dataType) {
     try {
-        const response = await fetch(`http://localhost:3000/data/v1/${dataType}`);
+        const response = await fetch(`/data/v1/${dataType}`);
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }

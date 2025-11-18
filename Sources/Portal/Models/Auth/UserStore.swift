@@ -6,27 +6,21 @@
 //
 
 import Foundation
-#if canImport(CryptoKit)
-import CryptoKit
-#else
 import Crypto
-#endif
 import Vapor
 
 public let userDirectory = FileManager.default.currentDirectoryPath.appending("users.encrypted")
 public let activitiesDirectory = FileManager.default.currentDirectoryPath.appending("activities_log.encrypted")
 
-public final class UserStore: Sendable {
+public final class UserStore: @unchecked Sendable {
     
     private let usersFilePath = userDirectory
     private let activityRecordPath = activitiesDirectory
     private let key: SymmetricKey
     
     public init() {
-            // Prova a caricare da variabile d'ambiente
             if let envKey = Environment.get("ENCRYPTION_KEY") {
                 var keyData = Data(envKey.utf8)
-                
                 
                 if keyData.count < 32 {
                     keyData.append(Data(repeating: 0, count: 32 - keyData.count))
@@ -40,12 +34,10 @@ public final class UserStore: Sendable {
                 assert(keyData.count == 32, "La chiave deve essere esattamente 32 byte")
                 self.key = SymmetricKey(data: keyData)
                 
-                print("⚠️  WARNING: Usando chiave di crittografia di default!")
-                print("⚠️  Imposta la variabile d'ambiente ENCRYPTION_KEY in produzione")
+                print("⚠️ WARNING: Chiave di crittografia di default")
             }
         }
         
-        // Metodo per generare una nuova chiave casuale
         static func generateNewKey() -> String {
             let key = SymmetricKey(size: .bits256)
             return key.withUnsafeBytes { bytes in
@@ -97,30 +89,6 @@ public final class UserStore: Sendable {
         let encrypted = try encrypt(json)
         try encrypted.write(to: URL(filePath: usersFilePath))
     }
-    
-//    func findUser(username: String) throws -> User? {
-//        return try loadUsers().first(where: { $0.username.lowercased() == username })
-//    }
-//    
-//    func addUser(_ user: User) throws {
-//        var users = try loadUsers()
-//        if users.contains(where: { $0.username.lowercased() == user.username.lowercased() }) {
-//            throw Abort(.conflict, reason: "User already exists")
-//        }
-//        
-//        users.append(user)
-//        try saveUsers(users)
-//    }
-//    
-//    func updateUser(_ user: User) throws {
-//        var users = try loadUsers()
-//        if let idx = users.firstIndex(where: { $0.id == user.id }) {
-//            users[idx] = user
-//            try saveUsers(users)
-//        } else {
-//            throw Abort(.notFound, reason: "User not found among signed up users")
-//        }
-//    }
     
     func saveActivities(_ activities: [Activity]) throws {
         let encoder = JSONEncoder()

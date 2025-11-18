@@ -51,7 +51,7 @@ async function logout() {
     // Chiama l'API di logout se disponibile
     if (token) {
         try {
-            await fetch('http://localhost:8080/api/v1/auth/logout', {
+            await fetch('/api/v1/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
