@@ -6,7 +6,11 @@
 //
 
 import Foundation
+#if canImport(CryptoKit)
 import CryptoKit
+#else
+import Crypto
+#endif
 import Vapor
 
 public let userDirectory = FileManager.default.currentDirectoryPath.appending("users.encrypted")

@@ -460,8 +460,7 @@
         font-size: 14px;
         line-height: 1.6;
         margin-bottom: 16px;
-        /* Impostiamo un'altezza fissa e overflow per imitare line-clamp */
-        height: 68px; /* Circa 3 righe di testo */
+        height: 68px; 
         display: flex;
         flex-direction: column;
         gap: 4px;
